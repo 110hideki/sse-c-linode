@@ -1,0 +1,6 @@
+{
+    "aws_access_key_id": "example-access-key",
+    "aws_secret_access_key": "example-secret-access-key",
+    "endpoint_url": "https://example-cluster-url"
+}
+

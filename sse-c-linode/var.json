@@ -1,0 +1,6 @@
+{
+    "encryption_key": "example-encryption-key-987654321",
+    "algorithm": "AES256",
+    "bucket_name": "example-bucket-name"
+}
+
