@@ -33,8 +33,10 @@ with open(VAR_FILE, 'r') as var_file:
 ENCRYPTION_KEY = var_config["encryption_key"]
 ALGO = var_config["algorithm"]
 BUCKET = var_config["bucket_name"]
+S3_PATH = var_config["s3_path"]
 
 FILE = args.input_file
+s3_file_path_name = S3_PATH + FILE  # object storage 内のファイル名
 
 # S3クライアントの作成
 client = boto3.client("s3", **aws_cfg)
@@ -46,7 +48,7 @@ with open(FILE, 'rb') as file_data:
         SSECustomerKey=ENCRYPTION_KEY,
         SSECustomerAlgorithm=ALGO,
         Bucket=BUCKET,
-        Key=FILE,
+        Key=s3_file_path_name,
         Body=file_data
     )
 
