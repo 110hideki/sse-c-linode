@@ -41,15 +41,22 @@ client = boto3.client("s3", **aws_cfg)
 
 print("Downloading encrypted Object Storage file.")
 
-r2 = client.get_object(
-    SSECustomerKey=ENCRYPTION_KEY,
-    SSECustomerAlgorithm=ALGO,
-    Bucket=BUCKET,
-    Key=FILE
-)
+try:
+    r2 = client.get_object(
+        SSECustomerKey=ENCRYPTION_KEY,
+        SSECustomerAlgorithm=ALGO,
+        Bucket=BUCKET,
+        Key=FILE
+    )
+    
+    with open(args.output_file, 'wb') as output_file:
+        output_file.write(r2["Body"].read())
 
-with open(args.output_file, 'wb') as output_file:
-    output_file.write(r2["Body"].read())
+    print(f"Decrypted object saved to: {args.output_file}")
 
-print(f"Decrypted object saved to: {args.output_file}")
-
+except client.exceptions.ClientError as e:
+    # クライアントエラーが発生した場合の処理
+    if e.response['Error']['Code'] == 'InvalidSSECustomerKey':
+        print("Error: Wrong encryption key was sent.")
+    else:
+        print(f"An error occurred: {e}")
